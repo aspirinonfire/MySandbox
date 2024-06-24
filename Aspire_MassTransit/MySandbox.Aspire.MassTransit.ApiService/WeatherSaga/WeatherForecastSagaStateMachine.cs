@@ -1,6 +1,5 @@
 ﻿using MassTransit;
 using MySandbox.Aspire.MassTransit.ServiceDefaults.Messages;
-using System.Text.Json;
 
 namespace MySandbox.Aspire.MassTransit.ApiService.WeatherSaga
 {
@@ -26,12 +25,8 @@ namespace MySandbox.Aspire.MassTransit.ApiService.WeatherSaga
                 When(OnForecastRetrievedSuccessfully)
                     .Then(context =>
                     {
-                        var forecastJson = JsonSerializer.Serialize(context.Message.WeatherForecast,
-                            new JsonSerializerOptions()
-                            {
-                                WriteIndented = true,
-                            });
-                        logger.LogInformation("Got Forecast:\n{forecast}", forecastJson);
+                        logger.LogInformation("Broadcasting received forecast...");
+                        context.Publish(new FinalWeatherForecast(context.Message.CorrelationId, context.Message.WeatherForecast));
                     })
                     .TransitionTo(Final));
         }

@@ -27,6 +27,8 @@ builder.Services.AddMassTransit(busConfig =>
         rabbitCfg.Host(host);
         rabbitCfg.ConfigureEndpoints(context);
     });
+
+    busConfig.AddConsumer<FinalWeatherForecastConsumer>();
 });
 
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
@@ -35,6 +37,8 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
     // Learn more about service discovery scheme resolution at https://aka.ms/dotnet/sdschemes.
     client.BaseAddress = new("https+http://apiservice");
 });
+
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 
@@ -54,6 +58,8 @@ app.UseOutputCache();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+app.MapHub<FinalForecastHub>("/eventHub");
 
 app.MapDefaultEndpoints();
 
