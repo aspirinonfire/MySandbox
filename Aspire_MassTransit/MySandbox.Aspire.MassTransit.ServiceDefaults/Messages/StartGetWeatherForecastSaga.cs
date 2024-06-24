@@ -12,4 +12,6 @@ namespace MySandbox.Aspire.MassTransit.ServiceDefaults.Messages
     {
         public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
+
+    public sealed record FinalWeatherForecast(Guid CorrelationId, WeatherForecast[] WeatherForecast) : CorrelatedBy<Guid>;
 }
