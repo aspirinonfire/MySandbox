@@ -1,0 +1,48 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySandbox.Aspire.MassTransit.AppHost", "MySandbox.Aspire.MassTransit.AppHost\MySandbox.Aspire.MassTransit.AppHost.csproj", "{BC76A5A1-5A34-451F-9282-19E328D6563A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySandbox.Aspire.MassTransit.ServiceDefaults", "MySandbox.Aspire.MassTransit.ServiceDefaults\MySandbox.Aspire.MassTransit.ServiceDefaults.csproj", "{E725109D-E7D6-41E9-8DFF-50FBEFFB4387}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySandbox.Aspire.MassTransit.ApiService", "MySandbox.Aspire.MassTransit.ApiService\MySandbox.Aspire.MassTransit.ApiService.csproj", "{E625EB3B-4923-408B-9C84-0F95BD7A0C59}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySandbox.Aspire.MassTransit.Web", "MySandbox.Aspire.MassTransit.Web\MySandbox.Aspire.MassTransit.Web.csproj", "{88504BA1-C60A-4948-B42C-602C0904A421}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MySandbox.Aspire.MassTransit.Tests", "MySandbox.Aspire.MassTransit.Tests\MySandbox.Aspire.MassTransit.Tests.csproj", "{400EF389-987F-4A78-A44B-1510E4C06E94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC76A5A1-5A34-451F-9282-19E328D6563A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC76A5A1-5A34-451F-9282-19E328D6563A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC76A5A1-5A34-451F-9282-19E328D6563A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC76A5A1-5A34-451F-9282-19E328D6563A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E725109D-E7D6-41E9-8DFF-50FBEFFB4387}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E725109D-E7D6-41E9-8DFF-50FBEFFB4387}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E725109D-E7D6-41E9-8DFF-50FBEFFB4387}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E725109D-E7D6-41E9-8DFF-50FBEFFB4387}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E625EB3B-4923-408B-9C84-0F95BD7A0C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E625EB3B-4923-408B-9C84-0F95BD7A0C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E625EB3B-4923-408B-9C84-0F95BD7A0C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E625EB3B-4923-408B-9C84-0F95BD7A0C59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88504BA1-C60A-4948-B42C-602C0904A421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88504BA1-C60A-4948-B42C-602C0904A421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88504BA1-C60A-4948-B42C-602C0904A421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88504BA1-C60A-4948-B42C-602C0904A421}.Release|Any CPU.Build.0 = Release|Any CPU
+		{400EF389-987F-4A78-A44B-1510E4C06E94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{400EF389-987F-4A78-A44B-1510E4C06E94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{400EF389-987F-4A78-A44B-1510E4C06E94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{400EF389-987F-4A78-A44B-1510E4C06E94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D8982E0-FA07-4E3F-A338-5D58538CCC2D}
+	EndGlobalSection
+EndGlobal
