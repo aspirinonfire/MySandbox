@@ -29,7 +29,19 @@ builder.Services.AddMassTransit(busConfig =>
     });
 
     busConfig.AddConsumer<FinalWeatherForecastConsumer>();
+
+    busConfig
+        .AddOptions<MassTransitHostOptions>()
+        .Configure(options =>
+        {
+            options.WaitUntilStarted = true;
+            options.StartTimeout = TimeSpan.FromSeconds(30);
+            options.StopTimeout = TimeSpan.FromSeconds(30);
+            options.ConsumerStopTimeout = TimeSpan.FromSeconds(30);
+        });
 });
+
+
 
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
 {

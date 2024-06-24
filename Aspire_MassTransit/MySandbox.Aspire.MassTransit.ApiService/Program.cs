@@ -30,6 +30,16 @@ builder.Services.AddMassTransit(busConfig =>
         rabbitCfg.Host(host);
         rabbitCfg.ConfigureEndpoints(context);
     });
+
+    busConfig
+        .AddOptions<MassTransitHostOptions>()
+        .Configure(options =>
+        {
+            options.WaitUntilStarted = true;
+            options.StartTimeout = TimeSpan.FromSeconds(30);
+            options.StopTimeout = TimeSpan.FromSeconds(30);
+            options.ConsumerStopTimeout = TimeSpan.FromSeconds(30);
+        });
 });
 
 var app = builder.Build();
