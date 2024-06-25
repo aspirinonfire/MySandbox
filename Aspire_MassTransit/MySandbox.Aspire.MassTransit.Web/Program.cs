@@ -1,4 +1,5 @@
 using MassTransit;
+using Microsoft.AspNetCore.ResponseCompression;
 using MySandbox.Aspire.MassTransit.Web;
 using MySandbox.Aspire.MassTransit.Web.Components;
 
@@ -52,7 +53,15 @@ builder.Services.AddHttpClient<WeatherApiClient>(client =>
 
 builder.Services.AddSignalR();
 
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        ["application/octet-stream"]);
+});
+
 var app = builder.Build();
+
+app.UseResponseCompression();
 
 if (!app.Environment.IsDevelopment())
 {
@@ -71,7 +80,7 @@ app.UseOutputCache();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.MapHub<FinalForecastHub>("/eventHub");
+app.MapHub<FinalForecastHub>("/forecasthub");
 
 app.MapDefaultEndpoints();
 
