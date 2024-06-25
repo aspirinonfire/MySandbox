@@ -1,5 +1,7 @@
 ﻿@page "/weather"
 @using MySandbox.Aspire.MassTransit.ServiceDefaults.Messages
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
 @attribute [StreamRendering(true)]
 @rendermode InteractiveServer
 @inject WeatherApiClient WeatherApi
@@ -9,19 +11,71 @@
 
 <h1>Weather</h1>
 
-<p>This component demonstrates showing data loaded from a backend API service.</p>
+<p>This component demonstrates showing data loaded from a backend API service using MassTransit Consumers and SignalR.</p>
 
-<div id="forecast-container" style="white-space: pre;">
-    <p><em>Loading...</em></p>
-</div>
+@if (forecasts == null)
+{
+    <p><em>Retrieving Forecast... Saga started: @(isSagaStarted)</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
-<script src="/js/signalr/dist/browser/signalr.js"></script>
-<script src="/js/Forecast.js"></script>
+<p>Is Connected to Weather Forecast Hub: @(IsConnected)</p>
 
 @code {
+    private WeatherForecast[]? forecasts;
+    private HubConnection? hubConnection;
+    private bool isSagaStarted;
+
     protected override async Task OnInitializedAsync()
     {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/forecasthub"))
+            .Build();
+
+        hubConnection.On<FinalWeatherForecast>("SendFinalForecast", (message) =>
+        {
+            forecasts = message.WeatherForecast;
+            InvokeAsync(StateHasChanged);
+        });
+
+        Logger.LogInformation("Connecting to Weather Forecast Hub");
+        await hubConnection.StartAsync();
+
+
         Logger.LogInformation("Requesting forecast saga...");
-        await WeatherApi.StartWeatherForecastSaga();
+        isSagaStarted = await WeatherApi.StartWeatherForecastSaga();
+    }
+
+    public bool IsConnected => hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
     }
 }
