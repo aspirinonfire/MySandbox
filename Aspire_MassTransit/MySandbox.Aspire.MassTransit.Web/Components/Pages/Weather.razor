@@ -51,11 +51,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        forecasts = null;
+        
         hubConnection = new HubConnectionBuilder()
             .WithUrl(Navigation.ToAbsoluteUri("/forecasthub"))
             .Build();
 
-        hubConnection.On<FinalWeatherForecast>("SendFinalForecast", (message) =>
+        hubConnection.On<FinalWeatherForecast>("PublishFinalForecast", (message) =>
         {
             forecasts = message.WeatherForecast;
             InvokeAsync(StateHasChanged);
@@ -63,7 +65,6 @@ else
 
         Logger.LogInformation("Connecting to Weather Forecast Hub");
         await hubConnection.StartAsync();
-
 
         Logger.LogInformation("Requesting forecast saga...");
         isSagaStarted = await WeatherApi.StartWeatherForecastSaga();

@@ -7,6 +7,8 @@
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
     <UserSecretsId>0f2952da-f2b7-489f-9fe6-be38096342c0</UserSecretsId>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>

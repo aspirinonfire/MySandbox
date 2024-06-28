@@ -3,18 +3,19 @@ using MySandbox.Aspire.MassTransit.ServiceDefaults.Messages;
 
 namespace MySandbox.Aspire.MassTransit.ApiService.WeatherSaga
 {
-    public sealed class GetForecastConsumer : IConsumer<GetForecast>
+    /// <summary>
+    /// Forecast Consumer that returns a random forecast for the next 5 days
+    /// </summary>
+    /// <remarks>
+    /// Instance of Forecast Consumer
+    /// </remarks>
+    /// <param name="logger"></param>
+    public sealed class GetForecastConsumer(ILogger<GetForecastConsumer> logger) : IConsumer<GetForecast>
     {
-        public GetForecastConsumer(ILogger<GetForecastConsumer> logger)
-        {
-            _logger = logger;
-        }
-
-        private readonly ILogger<GetForecastConsumer> _logger;
-
+        /// <inheritdoc/>
         public async Task Consume(ConsumeContext<GetForecast> context)
         {
-            _logger.LogInformation("Getting forecaset...");
+            logger.LogInformation("Getting forecaset...");
 
             var forecast = Enumerable.Range(1, 5)
                 .Select(index =>
@@ -43,18 +44,21 @@ namespace MySandbox.Aspire.MassTransit.ApiService.WeatherSaga
                         _ => "Scorching"
                     };
 
-
                     return new WeatherForecast
                     (
                         DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
                         temperature,
                         description
                     );
-                }).ToArray();
+                })
+                .ToArray();
+
+            // simulate data access
+            await Task.Delay(TimeSpan.FromSeconds(2));
 
             await context.Publish(new ForecastRetrievedSuccessfully(context.CorrelationId.GetValueOrDefault(), forecast));
 
-            _logger.LogInformation("Forecast published...");
+            logger.LogInformation("Forecast published...");
         }
     }
 }

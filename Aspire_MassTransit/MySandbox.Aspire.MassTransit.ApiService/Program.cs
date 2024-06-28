@@ -16,12 +16,16 @@ builder.Services.AddMassTransit(busConfig =>
 {
     busConfig.SetKebabCaseEndpointNameFormatter();
 
+    // register saga state machine with in-memory persistence.
+    // use durable storage in prod (sql, mongo, etc)
     busConfig
         .AddSagaStateMachine<WeatherForecastSagaStateMachine, WeatherForecastSagaInstance>()
         .InMemoryRepository();
 
+    // register all consumers in current project
     busConfig.AddConsumers(typeof(Program).Assembly);
 
+    // use RabbitMQ as message transport
     busConfig.UsingRabbitMq((context, rabbitCfg) =>
     {
         var configuration = context.GetRequiredService<IConfiguration>();
@@ -31,6 +35,7 @@ builder.Services.AddMassTransit(busConfig =>
         rabbitCfg.ConfigureEndpoints(context);
     });
 
+    // configure MT host options
     busConfig
         .AddOptions<MassTransitHostOptions>()
         .Configure(options =>
@@ -44,30 +49,17 @@ builder.Services.AddMassTransit(busConfig =>
 
 var app = builder.Build();
 
+// TODO configure and register necessary middleware - authN/Z, compression, etc
+
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
-app.MapGet("/weatherforecast", () =>
-{
-    var summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
-
+// register API route to start weather forecast
 app.MapPost("/startWeatherForecastSaga", async (IBus mtBus) =>
 {
-    await mtBus.Publish(new StartGetWeatherForecastSaga(NewId.NextSequentialGuid()));
+    var sagaId = NewId.NextSequentialGuid();
+    await mtBus.Publish(new StartGetWeatherForecastSaga(sagaId));
+    return Results.Accepted(uri: null, value: sagaId);
 });
 
 app.MapDefaultEndpoints();
